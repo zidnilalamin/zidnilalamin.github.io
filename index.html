@@ -8,7 +8,7 @@
     <style>
         body {
             background: linear-gradient(to bottom, rgba(10, 61, 98, 0.4), rgba(7, 153, 146, 0.4)),
-                        url('https://4kwallpapers.com/images/wallpapers/grand-mosque-grand-bur-dubai-masjid-dubai-ancient-2560x1440-8825.jpg') center bottom/contain no-repeat,
+                        url('https://4kwallpapers.com/images/wallpapers/grand-mosque-grand-bur-dubai-masjid-dubai-ancient-2560x1440-8825.jpg') top center/contain no-repeat,
                         linear-gradient(to bottom, #0a3d62, #079992);
             background-blend-mode: overlay;
             color: white;
@@ -252,6 +252,8 @@
         @media (max-width: 480px) {
             body {
                 font-size: 12px;
+                /* Mengatur background agar mentok ke atas */
+                background-position: top center;
             }
 
             h1 {
@@ -273,15 +275,73 @@
             }
 
             .bulan {
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
+                /* Mengubah posisi agar tidak menutupi komentar */
+                top: 5%;
+                left: 5%;
             }
 
             .ketupat {
-                width: 40px;
-                height: 40px;
+                width: 35px;
+                height: 35px;
+                /* Mengubah posisi agar tidak menutupi komentar */
+                top: auto;
+                right: 5%;
+                bottom: 15%;
+            }
+
+            .decorations {
+                /* Mengurangi jumlah dekorasi atau mengatur ulang posisinya */
+                justify-content: space-around;
+            }
+
+            .decoration-item:nth-child(3) { /* Contoh: Menyembunyikan bintang */
+                display: none;
+            }
+
+            .decoration-item:nth-child(4) { /* Mengatur ulang posisi ketupat lain */
+                bottom: 5%;
+                left: 10%;
+            }
+
+            .decoration-item:nth-child(5) { /* Mengatur ulang posisi bulan lain */
+                bottom: 10%;
+                right: 5%;
             }
         }
+
+        /* Media query untuk layar sangat kecil (misalnya, max-width: 320px) */
+        @media (max-width: 320px) {
+            body {
+                font-size: 10px;
+            }
+            h1 {
+                font-size: 1.6em;
+            }
+            .message {
+                font-size: 0.9em;
+            }
+            button {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Contoh Media query untuk orientasi landscape (opsional) */
+        /* @media (max-height: 400px) and (orientation: landscape) {
+            .buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+            button {
+                width: auto;
+                margin: 5px;
+            }
+            .message {
+                margin-bottom: 15px;
+            }
+        } */
 
         #audioControlBtn {
             position: fixed;
@@ -355,6 +415,15 @@
         </div>
         <div id="commentsDisplay">
         </div>
+        <div id="utterances-comments"></div>
+        <script src="https://utteranc.es/client.js"
+                repo="zidnilalamin/zidnilalamin.github.io"
+                issue-term="pathname"
+                label="comments"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+        </script>
     </div>
     <div id="audioControlBtn">
         <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -490,7 +559,7 @@
             }
         });
 
-        // JavaScript untuk Komentar
+        // JavaScript untuk Komentar (localStorage - mungkin ingin Anda hapus atau biarkan)
         const nameInput = document.getElementById('nameInput');
         const commentInput = document.getElementById('commentInput');
         const submitCommentButton = document.getElementById('submitComment');
@@ -501,21 +570,47 @@
             const comment = commentInput.value.trim();
 
             if (name && comment) {
-                // Buat elemen div baru untuk menampilkan komentar
-                const newComment = document.createElement('div');
-                newComment.classList.add('comment');
-                newComment.innerHTML = `<strong>${name}:</strong> ${comment}`;
-
-                // Tambahkan komentar baru ke bagian tampilan komentar
-                commentsDisplay.appendChild(newComment);
-
-                // Bersihkan input setelah mengirim komentar
+                const newCommentData = { name: name, comment: comment };
+                comments.push(newCommentData);
+                displayComments();
+                saveComments(); // Simpan komentar setelah ditambahkan
                 nameInput.value = '';
                 commentInput.value = '';
             } else {
                 alert('Mohon isi nama dan komentar Anda.');
             }
         });
+
+        const commentsKey = 'idulFitriComments'; // Kunci untuk menyimpan komentar di localStorage
+        let comments = []; // Array untuk menyimpan komentar sementara
+
+        // Fungsi untuk menyimpan komentar ke localStorage
+        function saveComments() {
+            localStorage.setItem(commentsKey, JSON.stringify(comments));
+        }
+
+        // Fungsi untuk memuat komentar dari localStorage
+        function loadComments() {
+            const storedComments = localStorage.getItem(commentsKey);
+            if (storedComments) {
+                comments = JSON.parse(storedComments);
+                displayComments(); // Panggil fungsi untuk menampilkan komentar yang dimuat
+            }
+        }
+
+        // Fungsi untuk menampilkan komentar
+        function displayComments() {
+            commentsDisplay.innerHTML = ''; // Bersihkan tampilan komentar sebelumnya
+            comments.forEach(commentData => {
+                const newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                newComment.innerHTML = `<strong>${commentData.name}:</strong> ${commentData.comment}`;
+                commentsDisplay.appendChild(newComment);
+            });
+        }
+
+        // Panggil fungsi loadComments saat halaman dimuat
+        window.addEventListener('load', loadComments);
 
         // JavaScript untuk Kontrol Audio
         const hariRayaMusic = document.getElementById('hariRayaMusic');
