@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Selamat Hari Raya Idul Fitri</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, rgba(10, 61, 98, 0.4), rgba(7, 153, 146, 0.4)),
+                        url('https://4kwallpapers.com/images/wallpapers/grand-mosque-grand-bur-dubai-masjid-dubai-ancient-2560x1440-8825.jpg') center bottom/contain no-repeat,
+                        linear-gradient(to bottom, #0a3d62, #079992);
+            background-blend-mode: overlay;
+            color: white;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 16px; /* Ukuran font dasar untuk desktop */
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 1.5em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #fffdfd;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #maafBtn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #malasBtn {
+            background-color: #dc3545;
+            color: white;
+            position: static;
+            transform: scale(1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            color: #333;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .decorations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .decoration-item {
+            opacity: 0.7;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+
+        .bulan {
+            width: 80px;
+            height: 80px;
+        }
+
+        .ketupat {
+            width: 70px;
+            height: 70px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Styling untuk Komentar */
+        .comment-section {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .comment-form input[type="text"],
+        .comment-form textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .comment-form button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .comment {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 5px solid #079992;
+        }
+
+        .comment strong {
+            font-weight: bold;
+            color: #a7ffeb;
+            margin-right: 10px;
+        }
+
+        /* Media query untuk tablet (max-width: 768px) */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+
+            .message {
+                font-size: 1.2em;
+                margin-bottom: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 1em;
+                width: 80%;
+            }
+
+            .bulan {
+                width: 60px;
+                height: 60px;
+            }
+
+            .ketupat {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Media query untuk ponsel (max-width: 480px) */
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .message {
+                font-size: 1em;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                width: 90%;
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .bulan {
+                width: 50px;
+                height: 50px;
+            }
+
+            .ketupat {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        #audioControlBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+            transition: background-color 0.3s ease;
+        }
+
+        #audioControlBtn:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #audioControlBtn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="hariRayaMusic" src="URL_AUDIO_ANDA_DI_SINI" loop style="display: none;" preload="auto"></audio>
+    <div class="decorations">
+        <img src="https://www.freeiconspng.com/uploads/crescent-moon-png-20.png" alt="Bulan Sabit"
+            class="decoration-item bulan" style="top: 10%; left: 10%;">
+        <img src="https://cdn-icons-png.flaticon.com/128/5429/5429718.png"
+            alt="Ketupat" class="decoration-item ketupat" style="top: 30%; right: 15%;">
+        <img src="https://pics.freeicons.io/uploads/icons/png/6072456641685121030-64.png" alt="Bintang"
+            class="decoration-item" style="top: 60%; left: 20%; width: 50px; height: 50px;">
+        <img src="https://cdn-icons-png.flaticon.com/128/5429/5429718.png"
+            alt="Ketupat" class="decoration-item ketupat" style="bottom: 20%; left: 35%;">
+        <img src="https://www.freeiconspng.com/uploads/crescent-moon-png-20.png" alt="Bulan Sabit"
+            class="decoration-item bulan" style="bottom: 10%; right: 10%; transform: scaleX(-1);">
+    </div>
+    <div class="container">
+        <h1>Selamat Hari Raya Idul Fitri 1445 H</h1>
+
+        <div class="message">
+            Minal Aidin Wal Faizin<br>
+            Mohon Maaf Lahir dan Batin
+        </div>
+
+        <div class="buttons">
+            <button id="maafBtn">Maafkan Yaa</button>
+            <button id="malasBtn">Malas</button>
+        </div>
+
+        <div id="thrModal" class="modal">
+            <h3>Kalau begitu bagi THR-nya Donk!!!</h3>
+            <img src="https://via.placeholder.com/250x250.png?text=QR+Code+Disini" class="qr-code" alt="QR Code">
+            <p>Scan QR untuk mengirim THR<br>Terima kasih 😊</p>
+            <button onclick="closeModal()">Tutup</button>
+        </div>
+    </div>
+
+    <div class="comment-section">
+        <h2>Berikan tanggapan dan komentar selama berteman/berkenalan dengan saya.</h2>
+        <div class="comment-form">
+            <input type="text" id="nameInput" placeholder="Nama Anda">
+            <textarea id="commentInput" placeholder="Komentar Anda"></textarea>
+            <button id="submitComment">Kirim Komentar</button>
+        </div>
+        <div id="commentsDisplay">
+        </div>
+    </div>
+    <div id="audioControlBtn">
+        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd"
+                d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.757c1.25 0.726 1.25 2.529 0 3.255L7.28 19.99c-1.25 0.726-2.779-0.29-2.779-1.643V5.653z"
+                clip-rule="evenodd" />
+        </svg>
+        <svg class="stop-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14z" />
+        </svg>
+    </div>
+    <script>
+        let interactionCount = 0;
+        let scale = 1;
+        const malasBtn = document.getElementById('malasBtn');
+        const maafBtn = document.getElementById('maafBtn');
+        const modal = document.getElementById('thrModal');
+
+        // Fungsi untuk mendapatkan posisi kursor (untuk interaksi pertama)
+        function getCursorPosition(event) {
+            const rect = malasBtn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            let clientX, clientY;
+            if (event.clientX !== undefined) {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            } else if (event.touches && event.touches.length > 0) {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+            } else {
+                // Fallback jika posisi kursor tidak ditemukan
+                return null;
+            }
+            return { x: clientX, y: clientY, centerX: centerX, centerY: centerY };
+        }
+
+        // Fungsi untuk posisi acak dalam layar
+        function getRandomPosition() {
+            const btnWidth = malasBtn.offsetWidth * scale;
+            const btnHeight = malasBtn.offsetHeight * scale;
+
+            const maxX = window.innerWidth - btnWidth - 20;
+            const maxY = window.innerHeight - btnHeight - 20;
+
+            return {
+                x: Math.max(10, Math.random() * maxX),
+                y: Math.max(10, Math.random() * maxY)
+            };
+        }
+
+        // Fungsi penanganan interaksi
+        function handleInteraction(event) {
+            interactionCount++;
+
+            // Update skala (pengecilan)
+            scale *= 0.8;
+            malasBtn.style.transform = `scale(${scale})`;
+
+            if (interactionCount === 1) {
+                // Interaksi pertama: bergerak sedikit menjauhi kursor
+                const cursor = getCursorPosition(event);
+                if (cursor) {
+                    const deltaX = cursor.clientX - cursor.centerX;
+                    const deltaY = cursor.clientY - cursor.centerY;
+
+                    // Normalisasi vektor dan kalikan dengan jarak kecil (misalnya 30px)
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    const moveX = (deltaX / distance || 0) * 30;
+                    const moveY = (deltaY / distance || 0) * 30;
+
+                    const currentLeft = parseFloat(malasBtn.style.left || getComputedStyle(malasBtn).left);
+                    const currentTop = parseFloat(malasBtn.style.top || getComputedStyle(malasBtn).top);
+
+                    let newLeft = (isNaN(currentLeft) ? cursor.centerX - malasBtn.offsetWidth / 2 : currentLeft) + moveX;
+                    let newTop = (isNaN(currentTop) ? cursor.centerY - malasBtn.offsetHeight / 2 : currentTop) + moveY;
+
+                    // Pastikan posisi baru berada di dalam layar (sedikit penyesuaian batas)
+                    const btnWidthScaled = malasBtn.offsetWidth * scale;
+                    const btnHeightScaled = malasBtn.offsetHeight * scale;
+                    newLeft = Math.max(10, Math.min(window.innerWidth - btnWidthScaled - 10, newLeft));
+                    newTop = Math.max(10, Math.min(window.innerHeight - btnHeightScaled - 10, newTop));
+
+                    malasBtn.style.position = 'absolute';
+                    malasBtn.style.left = `${newLeft}px`;
+                    malasBtn.style.top = `${newTop}px`;
+                } else {
+                    // Jika posisi kursor tidak didapatkan, gunakan posisi acak
+                    const newPos = getRandomPosition();
+                    malasBtn.style.position = 'absolute';
+                    malasBtn.style.left = `${newPos.x}px`;
+                    malasBtn.style.top = `${newPos.y}px`;
+                }
+            } else if (interactionCount >= 2 && interactionCount <= 5) {
+                // Interaksi kedua hingga kelima: bergerak acak
+                const newPos = getRandomPosition();
+                malasBtn.style.position = 'absolute';
+                malasBtn.style.left = `${newPos.x}px`;
+                malasBtn.style.top = `${newPos.y}px`;
+            } else if (interactionCount >= 6) {
+                // Interaksi keenam dan seterusnya: menghilang
+                malasBtn.style.display = 'none';
+            }
+
+            // Pastikan tombol tetap terlihat selama 5 interaksi pertama
+            if (interactionCount <= 5) {
+                malasBtn.style.display = 'block'; // Memastikan tombol terlihat
+            }
+        }
+
+        // Event listeners untuk tombol Malas
+        malasBtn.addEventListener('mouseenter', handleInteraction);
+        malasBtn.addEventListener('click', handleInteraction);
+        malasBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleInteraction(e); // Kirimkan objek event untuk mendapatkan posisi sentuhan
+        });
+
+        // Fungsi untuk modal THR
+        maafBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Tutup modal saat klik di luar
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // JavaScript untuk Komentar
+        const nameInput = document.getElementById('nameInput');
+        const commentInput = document.getElementById('commentInput');
+        const submitCommentButton = document.getElementById('submitComment');
+        const commentsDisplay = document.getElementById('commentsDisplay');
+
+        submitCommentButton.addEventListener('click', function () {
+            const name = nameInput.value.trim();
+            const comment = commentInput.value.trim();
+
+            if (name && comment) {
+                // Buat elemen div baru untuk menampilkan komentar
+                const newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                newComment.innerHTML = `<strong>${name}:</strong> ${comment}`;
+
+                // Tambahkan komentar baru ke bagian tampilan komentar
+                commentsDisplay.appendChild(newComment);
+
+                // Bersihkan input setelah mengirim komentar
+                nameInput.value = '';
+                commentInput.value = '';
+            } else {
+                alert('Mohon isi nama dan komentar Anda.');
+            }
+        });
+
+        // JavaScript untuk Kontrol Audio
+        const hariRayaMusic = document.getElementById('hariRayaMusic');
+        const audioControlBtn = document.getElementById('audioControlBtn');
+        const playIcon = audioControlBtn.querySelector('.play-icon');
+        const stopIcon = audioControlBtn.querySelector('.stop-icon');
+        let isPlaying = false;
+
+        // Fungsi untuk memperbarui tampilan ikon tombol
+        function updatePlayPauseIcon() {
+            if (isPlaying) {
+                playIcon.style.display = 'none';
+                stopIcon.style.display = 'inline-block';
+            } else {
+                playIcon.style.display = 'inline-block';
+                stopIcon.style.display = 'none';
+            }
+        }
+
+        audioControlBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                hariRayaMusic.pause();
+                isPlaying = false;
+            } else {
+                hariRayaMusic.play();
+                isPlaying = true;
+            }
+            updatePlayPauseIcon();
+        });
+
+        // Autoplay saat halaman dimuat
+        window.addEventListener('load', () => {
+            hariRayaMusic.play().then(() => {
+                isPlaying = true;
+                updatePlayPauseIcon();
+            }).catch(error => {
+                // Autoplay mungkin diblokir oleh browser, tampilkan ikon play
+                console.error("Autoplay dicegah:", error);
+                isPlaying = false;
+                updatePlayPauseIcon();
+            });
+        });
+
+        // Pastikan ikon awal sesuai dengan status awal (tidak diputar)
+        updatePlayPauseIcon();
+    </script>
+</body>
+
+</html>
