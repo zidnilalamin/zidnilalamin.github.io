@@ -8,7 +8,7 @@
     <style>
         body {
             background: linear-gradient(to bottom, rgba(10, 61, 98, 0.4), rgba(7, 153, 146, 0.4)),
-                        url('https://4kwallpapers.com/images/wallpapers/grand-mosque-grand-bur-dubai-masjid-dubai-ancient-2560x1440-8825.jpg') top center/contain no-repeat,
+                        url('https://4kwallpapers.com/images/wallpapers/grand-mosque-grand-bur-dubai-masjid-dubai-ancient-2560x1440-8825.jpg') top center/cover no-repeat,
                         linear-gradient(to bottom, #0a3d62, #079992);
             background-blend-mode: overlay;
             color: white;
@@ -21,6 +21,29 @@
             flex-direction: column;
             justify-content: center;
             font-size: 16px; /* Ukuran font dasar untuk desktop */
+        }
+
+        .top-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+        }
+
+        .top-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+            font-size: 0.9em; /* Ukuran font lebih kecil */
+        }
+
+        .top-menu a:hover {
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .container {
@@ -96,11 +119,85 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
 
+        #takbiranModal, #sunnahModal {
+            z-index: 1001;
+        }
+
+        #takbiranModal h3, #sunnahModal h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        #takbiranModal p {
+            line-height: 1.6;
+            white-space: pre-line; /* Agar teks takbir mempertahankan format baris */
+        }
+
+        #sunnahModal .qr-code {
+            max-width: 90%; /* Agar gambar tidak terlalu besar di modal */
+            height: auto;
+        }
+
+        #takbiranModal, #sunnahModal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        color: #333;
+        text-align: center;
+        z-index: 1001;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        padding: 20px;
+        max-width: 95vw;
+        max-height: 95vh;
+        overflow: auto;
+    }
+
+    #takbiranModal h3, #sunnahModal h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    #takbiranModal p {
+        line-height: 1.6;
+    }
+
+    #sunnahModal .qr-code {
+        display: block;
+        max-width: 1080px; /* Lebar maksimum seperti postingan Instagram */
+        max-height: 1080px; /* Tinggi maksimum seperti postingan Instagram (untuk persegi) */
+        width: auto;
+        height: auto;
+        margin: 10px auto;
+    }
+
+    #takbiranModal button, #sunnahModal button {
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        transition: background-color 0.3s ease;
+        margin-top: 15px; /* Kurangi margin atas tombol */
+    }
+
+    #takbiranModal button:hover, #sunnahModal button:hover {
+        background-color: #0056b3;
+    }
+
+        #takbiranModal button:hover, #sunnahModal button:hover {
+            background-color: #0056b3;
+        }
+
         .qr-code {
             width: 200px;
             height: 200px;
             margin: 20px 0;
-            border: 1px solid #ccc;
             border-radius: 10px;
         }
 
@@ -114,6 +211,8 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
+            /* Ubah properti ini untuk penyesuaian lebih lanjut */
+            /* align-items: flex-start; /* Contoh: Pindahkan dekorasi ke bagian atas */
         }
 
         .decoration-item {
@@ -141,7 +240,7 @@
             }
         }
 
-        /* Styling untuk Komentar */
+        /* Styling untuk Komentar (Commento) */
         .comment-section {
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
@@ -153,56 +252,6 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        .comment-form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .comment-form input[type="text"],
-        .comment-form textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-            color: #333;
-        }
-
-        .comment-form textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .comment-form button {
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .comment-form button:hover {
-            background-color: #0056b3;
-        }
-
-        .comment {
-            background-color: rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            border-left: 5px solid #079992;
-        }
-
-        .comment strong {
-            font-weight: bold;
-            color: #a7ffeb;
-            margin-right: 10px;
         }
 
         /* Media query untuk tablet (max-width: 768px) */
@@ -238,13 +287,62 @@
             }
 
             .bulan {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
 
             .ketupat {
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .decorations {
+                /* Contoh penyesuaian untuk tablet */
+                justify-content: space-evenly;
+                align-items: flex-start;
+            }
+
+            .decoration-item {
+                opacity: 0.6;
+            }
+
+            .decoration-item:nth-child(1) { /* Bulan 1 */
+                top: 5%;
+                left: 5%;
+            }
+
+            .decoration-item:nth-child(2) { /* Ketupat 1 */
+                top: 10%;
+                right: 10%;
+            }
+
+            .decoration-item:nth-child(3) { /* Bintang */
+                top: auto;
+                bottom: 5%;
+                left: 15%;
+                width: 40px;
+                height: 40px;
+            }
+
+            .decoration-item:nth-child(4) { /* Ketupat 2 */
+                bottom: 10%;
+                left: 25%;
+            }
+
+            .decoration-item:nth-child(5) { /* Bulan 2 */
+                bottom: 15%;
+                right: 15%;
+            }
+
+            .top-menu {
+                top: 15px;
+                right: 15px;
+                gap: 12px;
+            }
+
+            .top-menu a {
+                padding: 10px 15px;
+                font-size: 0.9em;
             }
         }
 
@@ -275,39 +373,62 @@
             }
 
             .bulan {
-                width: 40px;
-                height: 40px;
-                /* Mengubah posisi agar tidak menutupi komentar */
-                top: 5%;
-                left: 5%;
+                width: 30px;
+                height: 30px;
             }
 
             .ketupat {
-                width: 35px;
-                height: 35px;
-                /* Mengubah posisi agar tidak menutupi komentar */
-                top: auto;
-                right: 5%;
-                bottom: 15%;
+                width: 25px;
+                height: 25px;
             }
 
             .decorations {
-                /* Mengurangi jumlah dekorasi atau mengatur ulang posisinya */
+                /* Contoh penyesuaian untuk ponsel */
                 justify-content: space-around;
+                align-items: flex-start;
             }
 
-            .decoration-item:nth-child(3) { /* Contoh: Menyembunyikan bintang */
-                display: none;
+            .decoration-item {
+                opacity: 0.5;
             }
 
-            .decoration-item:nth-child(4) { /* Mengatur ulang posisi ketupat lain */
-                bottom: 5%;
-                left: 10%;
+            .decoration-item:nth-child(1) { /* Bulan 1 */
+                top: 2%;
+                left: 2%;
             }
 
-            .decoration-item:nth-child(5) { /* Mengatur ulang posisi bulan lain */
-                bottom: 10%;
+            .decoration-item:nth-child(2) { /* Ketupat 1 */
+                top: 5%;
                 right: 5%;
+            }
+
+            .decoration-item:nth-child(3) { /* Bintang */
+                top: auto;
+                bottom: 2%;
+                left: 10%;
+                width: 30px;
+                height: 30px;
+            }
+
+            .decoration-item:nth-child(4) { /* Ketupat 2 */
+                bottom: 5%;
+                left: 20%;
+            }
+
+            .decoration-item:nth-child(5) { /* Bulan 2 */
+                bottom: 8%;
+                right: 2%;
+            }
+
+            .top-menu {
+                top: 10px;
+                right: 10px;
+                gap: 10px;
+            }
+
+            .top-menu a {
+                padding: 8px 12px;
+                font-size: 0.8em;
             }
         }
 
@@ -325,6 +446,44 @@
             button {
                 font-size: 0.8em;
                 padding: 6px 12px;
+            }
+
+            .bulan {
+                width: 25px;
+                height: 25px;
+            }
+
+            .ketupat {
+                width: 20px;
+                height: 20px;
+            }
+
+            .decorations {
+                align-items: flex-start;
+            }
+
+            .decoration-item:nth-child(1) { /* Bulan 1 */
+                top: 1%;
+                left: 1%;
+            }
+
+            .decoration-item:nth-child(2) { /* Ketupat 1 */
+                top: 3%;
+                right: 3%;
+            }
+
+            .decoration-item:nth-child(3) { /* Bintang */
+                display: none; /* Sembunyikan bintang pada layar sangat kecil */
+            }
+
+            .decoration-item:nth-child(4) { /* Ketupat 2 */
+                bottom: 3%;
+                left: 15%;
+            }
+
+            .decoration-item:nth-child(5) { /* Bulan 2 */
+                bottom: 5%;
+                right: 1%;
             }
         }
 
@@ -368,10 +527,58 @@
             height: 20px;
             fill: white;
         }
+
+        .whatsapp-link {
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .whatsapp-logo {
+            width: 50px;
+            height: auto;
+            vertical-align: middle;
+        }
+
+        /* Gaya untuk Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.2);
+            margin-top: 30px; /* Berikan jarak dari konten di atas */
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .social-icon {
+            width: 30px;
+            height: auto;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .social-icon:hover {
+            opacity: 1;
+        }
+
+        .copyright {
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="top-menu">
+        <a href="#" id="takbiranMenu">Takbiran</a>
+        <a href="#" id="sunnahMenu">Sunnah Idul Fitri</a>
+        <a href="c:\Users\Zidnil\Desktop\Idul Fitri\gim.html" id="GimMenu">Gim</a>
+    </div>
     <audio id="hariRayaMusic" src="IdulFitri.mp3" loop style="display: none;" preload="auto"></audio>
     <div class="decorations">
         <img src="https://www.freeiconspng.com/uploads/crescent-moon-png-20.png" alt="Bulan Sabit"
@@ -386,35 +593,43 @@
             class="decoration-item bulan" style="bottom: 10%; right: 10%; transform: scaleX(-1);">
     </div>
     <div class="container">
-        <h1>Selamat Hari Raya Idul Fitri 1445 H</h1>
+        <h1>Selamat Hari Raya Idul Fitri 1446 H</h1>
 
         <div class="message">
             Minal Aidin Wal Faizin<br>
-            Mohon Maaf Lahir dan Batin
+            Maafkan segala salah dan khilaf. Semoga Allah SWT menerima amal ibadah kita dan menyatukan kita dalam
+            keberkahan-Nya.
         </div>
 
         <div class="buttons">
             <button id="maafBtn">Maafkan Yaa</button>
-            <button id="malasBtn">Malas</button>
+            <button id="malasBtn">Jangan Maafkan</button>
         </div>
 
         <div id="thrModal" class="modal">
-            <h3>Kalau begitu bagi THR-nya Donk!!!</h3>
-            <img src="https://via.placeholder.com/250x250.png?text=QR+Code+Disini" class="qr-code" alt="QR Code">
-            <p>Scan QR untuk mengirim THR<br>Terima kasih 😊</p>
+            <h3>Mohon dimaafkan yaa!!!</h3>
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMSEhUSExIVFRUXGBYVFhUVFRUVFxUVFRUWFxUVFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMsNyguLi0BCgoKDg0OGxAQGy0mHyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLf/AABEIARkAswMBIgACEQEDEQH/xAAcAAACAgMBAQAAAAAAAAAAAAAEBQMGAAECBwj/xABLEAACAQMCAwUFBAcCCQ0AAAABAgMABBESIQUTMQYiQVFhFDJxgZEHI0KhM1JicoKxwRWSJCVDU3STs8PRNDVUZHODoqOytMTw8f/EABsBAAEFAQEAAAAAAAAAAAAAAAUAAQIDBAYH/8QALBEAAgIBAwQBAwQCAwAAAAAAAAECAxEEEiEFMUFRExRS0SIyYXEjoQZCsf/aAAwDAQACEQMRAD8A5uYcnFCey5ODTNsb7b1wq75rskjncie8tSg1Y8aWqgOdiTVku4idzuB4UnYEMWAx16etJJEJZB7+EBY8aScHOBuN/Gg7ezLyxRZ08yWKLVjVp5sipq05Gcas4yKZTnUF2AwMbDr8a7sIMXFqf+tWv/uI6qsTjXJr0yVLzOKflliuvsolWeKIXqkSCUl/ZsaOWEwNPN72dXmMY8aji+zGQzzwe2r9xHDIW9m9/m83u45vdxyuuT73pXq9zeAc5j70TKi+nNSLH1Y0utv+X8Q/0e0/+XXN/WX/AHMOfTVfaeccP7HTyRWM5uFcXiovegLezcy3eZT+k747mjPd94fCh+CfZzJcy3cXtaxi2lEOv2fVzToDE6eaNHvDbJr03sROnsHDom6taRSL/wB1HDn598fQ1DwiydVvGj0hpOICTLHA0JJbpIM+emN8DxJApvq7vuF9LV9p5pwr7P5J572D2oIbNkUtyNXNEiFwccwaNgPPrVa4DZNdS28SkIZ2VdRGrSCCxOnI1YAO2RXudhaaL/ibAfpYbST4nlzxbf6oV5d9ltifb7NWVlaJJHZWBVlIgKbqRn/Kj61u02rsddjlLlLgzXaeClBJd3yE9oOwUlk9qpullFzcJbavZ9HLZ84bHNOrodsjp1o63+ziVrma29tQcqKGUyey51c5p106edtjk9cnOrwxvcO1Nm7Q27SaS0XE7eRSpzhHveXHk42bRMAR4HI9aY2n/Od7/otl/tL2sn12ox+5l/0lP2o85l7FSrJaIl5HJFeagk6wkacQtMv3XM7ysqHfUMeVDzdg5tF8y3Cu1mzLo5BHPK28c+x5h0E8zTjB6Z8cC72SkR8ABGCNIIOxBHDJ8gimHBblY5uJs/u+2RKf47WzTJ9O9T/X6j72L6On7UeV9ouzRspIVaYTc2NpBiLl6MFRj321e9126Uuit96vn2qxgXVqo2AgkAHkA8eKqarXS9Nslbp1Kby+f/QDr0q7nGK44OHtlCrg5J6+lG3FrFygQ3f8RQojqeO3YjPhnFaZR7cmRMWmKtxjAYack9D5U3kUFdxv50Jyammpdxmxebaspjya3S2obLHqwVMsArnJztU8e3WhzkwqFTcpYGAGXbr6VUZock4FWqW17mvbBOKXqgyNuhzVVP6ctPIzWRKLBmGCQNIyM0AQylWBwyOjqcA4aNgyHB64IG1W/ipEg1BQPh5UlMC572/pWqE98WpLuVOLTyjmbjN/Ik8+uR41Mb3EiQxaUa3CyrkdRgBSQBuKLfifFkm1FZRLdBYwDBD96IVkcKgzgEK0h3pn2Ft+bb8VtP10DAf9tA8f+6Feh3dsrzwMNzC7j90tCRj6OPrXOX2RrslBQjw/5/Iaqg5wUnJ8/wBfg8h4dJxT7pIknJsvuEAhh+6zCg0SZPfPLZD8wetafit/PBMpaR4YpC85WGIcqaKUTtrPUFXUEjyGK9D7K3QRJpf+kcRuF+OmUwL/AOGAUotLMRW/aBB4y3Mn+ts0lP5vVX1EX/0j/v8AJP4X97/1+CvW/aTiLykwymWZ0GQkEJJjiYkHBxsDMf71CJ/aaXjTrDMLySNiSYYjqiHJRiEzpGNEQ8/qaY/ZsP8AGUX+iTf+u3qzcIDxXnEbh7xbkRRMyKuP8GDSTObc4J3XkpnODsNq06qcabHCEVjH8/ko08JW1qcpPIm4Ik6oYJJ5+c0rXT26W0LOrtMsxk734eYVPXHhTG1mlZ3uIpL1ncCF5BaQYPs8kq6NJxgq7Sgn/gKZ8n/HkUw6ScPkHzjuIT/KQUt7F3zQx8TuXdzDDcXYSM9AyTzyyGMeOoyKvxU0ObyzclgiurguYZpJrwyqzC1c28KpzXR1YLGBhmK6xlugBxjfNTnur50vY35wDMJLzEMSmMiKPSxP4Pu44z3c+dXKCRms+Cs/vtcQM/7xt7gt+eac9sLJVs+IzLjMlq6tj9aKOYZ+OGA/hqyqai+Un/ZCyDkuG1/R5txK8muGWWeXmOoKp3FTCsQT7vXcChFWiUh2HwH8q4IrsqYxrhthwjkrZSnLdJ5ZyKn2x/OuFArFFTfJHBIW2xXAWuglSQ7dajnA52qbVqpM5rKr3CGWnFazU8pzQ2ayrkJmFSSF8Knntimx61Eprp2Zjkk1DDTHiRxEjY1xcQKDkjrRJWtXEuFwQOvWpZfgaSN8H4kLKeSdYJJUljRCsXL1Bo2YgnmOoxh28aI4V24MUly0lpcsJpubGE5BKJyYYtL5lADZiJ2JG/WlE83gKiY+VUS6fXZJylnLJrWzriorHAx4b2xktrWCJLWYOJNczHklHV5WknEZ5mdR1nBIG/lUzds7c+1a7C7Md1jmKPZ1JHJWFskTgjKqBkHPwpI0ZNatrJpZEhXq5wfRR7xqEumURi22+B49Ruk8JIK7DwSR3TX0NrO1sqywxwhkaVVdomXJklwQNBydZ6094Mbm29sZLWVpLqWWWJhyNMOrUYxNmQHIZiTpDfOrtYcPWKJY1GAowP8AjUb2hzkGuf1Vzc8xDNEMRwxAL+czQztw+5Z4opYWKm2w5lMDMyZmHdzD44O9DLGfZ3tZeF3jpJLLK/LkgTJluHnHfW4VgQWXOPLG4qzhWB61PG5z1qiNzfdFrged8T4m0C2FsbK5U28yyjvQMHjjjlTSpMxJb7xfex0O9ZedopZYb6BrWfF1zBCcw/dLJAiETfebd8O3d1bNU3GbnnXsjeEYEY+PU1uJBnejGm0sZw3SA+r10657Y4FnsuAB5AUHNBTqRd9qCmjo7XYwGxWyUTDbgjOd/KtvHUZOBV7bfYRIigY36nf0FRugycHYHb1qISVwX/OnUGMFhayoFY4rdNtEOiDUWg0QWI2oiS1KhSTsdxWHftYWUQFVOaI5dFRxCu5BtUZWcjpASJQ99BmjohUdzUoy5ITYpNtXSw4o1EqWSGrvl8GWQvCUb2T4nBBcSGYlWOFRiO7jx38Dmo2jqTkqwwygj1FCuq6tV149hbo3T5aibl4R6Vb3COMqwYehzUuK8ojsGjOqCZ4j5A5U/EGmlt2tvYv0sSzKPxJs30oBG+Mu4es0NsD0Bowa55A61Vbb7Qbc7SJJEf2l2ot+3FjpJ546HbB+lSxF9jK1KPdFRiOZrh/1pW/Lb+lEE7jy8aD4aSULnbWzPj0Y5FEk10unhitI5TVyzazuQjO3Sh5jtXdR3AA8c1piuTOQrbs3QE0FOmnanfDeIrEdxmlPELnW5IA86srlLfhrgk0sC2U1GWrVxJvQesk4ojGPBDIyWfatUMpI2K/nWVDCFkucyjwrtIiRuc1Gr1PCaDteQvnJNFFXTRV3HRIqmUnkkLnhoaRD404YUDImSTU4T5KbAeNa1KalC1FIuDVmUZnzwiHFdiuEOa7Fch1PUfLdjwj0Po+l+DTLPd8m6qna/tBPb7RqoH6xO/yFWo0ig4Wl7cGR1zFEdIH6zDrn0rLRW7JqKCNstsWxd2O4g8xYykEkbBmB+i1ZriBNJwi/QVLfdnoHTCoEYe6y90g/EdaRNxVkjaFxquEYRgfrlvdb4Y61uv0llXKMlNtc+Jo4k7RMOXGLeQsx06sYX4g0/qDhXZ1AqvMS8nXOThT+yKMuI8V0OhnP40pnHdZ0MY2OdS4IZOlDyipnqF22olE58CnNAuD1/Oi5mrLe7CgqVyDWqPCykMJbl6EDZNT3QJbA8TQ91bFACSDnPQ+Va3LESKQZJaaTgsPrWqDWVce5n51lVbWPtPQYzTCJRtS3pRdvLQeUWkFU+RhGKmIoaJ6mD1mkuSaNPQ8j13PJioFXxyPhU4oqmzBUV/sox4mppBjrS+WUlvQdKz6y5V1Nmnpend+pS8I2vSuq5zWZrj28vJ6MlhYIOIS6YnbyUn8qJ7NW2i2jHiRqJ8y25pZ2h1ezy6Ouk/Txx8qW9muOoiqZLiUjSAA8eFHzor0pJ2GDXyxHBeMVWOI2KDiVvKR7yuP4l6H6Ux/t+3YbToPielVjiV3IHjl9pt5OWSwX3SQRuMiuhcU1yC9yL9moLlcilXC+00E0SuWVCeqsdwai4jxUkjlTw48VY7n4YqUSq1KdbiEOKhNdhsgE4z6VxmtsexxM47ZNC64Tel82RTW/kXwBpXLkmtlL45IsEZdXxpfcDB600cYUscdcUnvZMsTWnKY0VlnOusqDJrdLJbsPUAua6RcGsiohV2zQWTwbkSxGpS21QKcVyZKpayyeSCQnO9YHqRxkVFEcGrVjBRM7eUkHJoZakuRtXArnOsXcqCOs/wCN6bbF2+zdZWVlAjqTmRQwIPiCPrQXZPTymt3ALxMVwQD3fwn6UfSu+tZFkFxAe+Bhl8HXyPrW7Q6hU2ZZl1VPyRHj8LgPWJP7oqp8YaGO+hURLoX9IdIwC+y5pk/aGZgVW1kD+bYCj1zXNlwvuOJTqeTdz6+Q+FHbtdVGOU8gmvSSk8ND3+z4W35SH+EULdWUI6RJ/dFLoFuYRoR1dB7pfOoDy9aL5pYZPXx+NaNHqYXcJ8mDqW7S1NtdzefpXE4x0rhjUckhG9FYxOMzl5YBeTYB26/lQXtoCkYy3Spb1xil9yF2K/PPnWyMVjkjIKsuCyzoWUjHTBPWkfEbV4m0yLg1euxVwDGy53BpvxLhsc6lXHz8RXP3dYnRqZQkv0o6rTdGru0sZxf6meSCY+dZVkn7EzBiFIK+BJ8KyiC6rp35Mb6Tf6LnEKIFLuFzfgPh0+FMNVY6b43wU0Qv08qJuEjmY4GaDDmjZSCMUJy8VoiZpMn192gL2/WEa3zjONqYJsNxnIqr9tJDoRfAt/TaqNRb8VcpLwPVD5LFF+R7FciQahnBruqPw/iskQwral/VP9Ke2faNG2cFP5VxN2qd090j0PQxrqqUIjvNZmuUcEZByPOt1Xk3Gya1morhWI22oJHdOoJ9aUmTUcjMnNZQHtp/Ub6VntTnohHxpsi+NhxNCs4B6io+S7e82PQV0lio361p0uplRYpoy63RV6ml1Sfc1I9DSvnxqa6AHSg9Y8eld10/VLU170sHm3U+nvRW/HnIvumXUQTgedKHk3xmiLxuvxpdI29F0uAalkddlb/lzgE7Nt869HDV49GDkEdQdsedek9muI86IZ95dj8q5Pr2lxP5V5Ox6Bqk4Ol+Bxk1lZWVznJ0hXbVsSKfl9adJSBT3k/eFPoxvRross1NHNdch/lTNmKuOVii0rbJRjfg56RAVzRlvZoy99Vb4jNQqN6Pi6Vl1MlswX6OH+TIh4h2Jt5clAY2PivT6VSuPcAntD94pKZwJANt/Pyr16zXLUfeWiSoY5F1KRgg1zt2kjL9p0FV8os8O4TxUwnB3Q9R5eoq3W9ysg1IwIpP2u7ISWh1xKzwnrjcx/H0qvWV48Z1Rt8Qeh+VDZQlW8MNafVp9y/Vqkdl2jQ7SDQfPqKZJxGFukin50k0wjGaYTisxWklU9GB+daeUDqR9acluO63S48Zh1BNeSdttxn41BxrjBhIVVySM5z0psjNnHH70RYJGaWy3eoAr40L95cPltz4eQowcIZBuc10fQuqRrk6pvCOV690+WoxZUssAmGql0q71ZZ+DNp1A5qvzQEE119Gspvyq5ZOTv0V+nw7I4yQRylSCDgimfZ3iphm3PdY7/Pxpco33FRkb0tTTG6twfkWm1DpsU4+D2KOQEAg9ayvOoePSxgIGDBdgd96yuRfR7cnXx61Tjksdoupx5Dc/wBKcx9ajtrZUGB/+/Gpita9BpnRDD7gvqOqWonldidGqdGoEUTG1bZAlrkiuZDqRF6s2/7o601XpSrhia2aY9PdT90dTTTQW2Bx6+VC9RZl4Cmmq2xyFRXsUQzJIqeWogUbacRil/RyK+Oukg0q4f2chTvSDnOeryb49AOgrd52chbvIDE/g0fd+o6GsppY8YAjB3B8KqfG+wVtNlkHKc75Xpn1WpU4nNasFuRrj6CZRuP3x/WrFFOrAMpBB3BG9VzqjPuiyM5R7HkvE+wd5FkpolX9k4b6GkU/CLhTh7Zx/CT+Yr3msNZJaGPhl8dZNHgqWE3hBMPgr1scLuG25Ex/hb+te81lQ+h/ks+vmeJL2VvSuRbsuN9yooZ7C4LDm4yNtzk17heOFjYkgAA5J2FeYBA8rHOQDsfDrVN+nVaNmivndPDOuHWekDzou4TK1IormboaojFJBxY8A0EwCZPTpVd4xEA5Ph1HrT63j1Jj1pX2ih9yjPRL5V6lL2COv6eNukk33XIjDb6hseooZmzk0fJaHQHyMZx86Abau/3I80ijapnwrKaWE8QjGplzvnOPM1lYpavDCEdImsnoaGuxXAFdKawFzZ2BQ9wSziJfHdz5L5fE13dXOhc+PRR5k9Kn4fbaF33Y7sfEk1nut2oeirdLIZGgUBQNhTCxj8aFto8mmiDAxQtvIUSwTVlR6qzVTDm5IwwIYAg9QarcsEti2qNTLAd2jHvR+q+Y9KsmqszSyJg3DuKRTrqjcHzHQg+RFGA0mvuz8Mh1gGN/14zpP5daFXh95H7lyrjykXf6ikMWPNbJqu+0cQG3KhPrrP8AKuWhvpdmljiH7A1H6mkLBWvtO7QBv8Djb1kIPh4LVe7NXwT7ptv1T5+lPu0nYFgDNA7PId3D9XPmPKqM6kHDAqw6g7EGhGrct3PYKaKxVvJ6CDUN7JhSfSqrZcbli2PfHketEXnaBXQqEIJrNkOwvi+Rxwe7R1wrDI8KA7TuBpycfGqkjOragSD6UZeyPKBrbOK0ae/4LVYvBk1U431yrfk6EhPTf+VQIMMDjPmPTxqfhoCK+5ycADwx41DK2K9C0erWoq3pdzzXU0Oi1wC7DhvMQOsaYJbGrrs7Df6VlLYL5kGkE4BP5kn+tZQOcbdz/sIRmsI9dxW9FdKKyY4UnyBrXKeCruC2ycyUsfdTYD9rxpso3oLhkOmNfM7n4nemdmmTQu6e6QUphtiMLaPAqauFNb1VUXZN1uuc1XJu0uiQxyI0W+FLDZvgelIYslbzSuPiBxvg+ooqO9U0hBVZmolnU9CK61jzpD5O6wVHrHnWw486QsklJuOdmILod9cN4Ouxpm84HjQ019jpUJ1qS5HUmux55xH7P548mKRXXyfY/XxpBPwa6jzqgOB4jBFerS3JPjSG8uvaJRbI2B/lG8h+qPWsk9HBmiOpmikcE4JLdyhMaBjOT5eg8aacc7Gy20Zk5yEDpkEH4Vc+PwrbCCZNliIVv3G2OapnbjtEbhwsZPKXp+0fOtGl6YrZqJRfrnCOStldPjQsjE1JI+a2Eyp3G2Meua7XT0xorUI9kcxZbKyblIiSbAxpB9TWUM+QSKynxAnlntYNI+2XFmt7YsmNRIUZ9abxtVR+06XFug83B+lALniLL4PLJOFdvUIVZ42jOANQGVzV64LxKCUZjlRvgRn6V4vb3pKAEAj4UBPclXyndPmuR/Kg6lLJujqMcM+jNVb1V4Zw/tNexgaLgkeTjV+dPOH/AGoSodM8QbH4o9vyNXZLlcmesUNf2aTKUkUMD5/0qs8P+0Wzl6uYz5OMfnVituJxSbpKjD0IpFqkitz2Fxa/oszQjfSffUeQPiK6teOxOdJbQ/6j90/nVrDUBxLgsE/6SME+DdGHzpDgqvXWs0oveDS26s8Vz3FydMveAA8m61V4/tDUEh4i3kyAkGlki5JF/wBRrNRqlDt/H4QSn5UNN2/cnEdsc/tMBTb0N8kS/Amhby+jiGXcL8ev0rzi97YXjbFAi/s4z9a3ZcfAOs2wkf8AWlkzv8KW5DfLEuym5utoByo/863Uj9laXpD7PJozuG3boSfM0huu3l4TpDRRDyUFsUm4jctJqeSd3J8thVNsnjgb6mC7nq/ajiUHsro8qBmU4BYZz4V5YqbdaX2gibVkFjjqTmmXBRqQ/ssV+VFOk6jbPazFqpqxcEMsW2aGL4pyyAtil8llnUdhjw8a6XemgbswLJ5SzEnx9KyiTAKyoYRZuPXFNUf7TckwDPdJI+dXRDVV+0gD2dG8VcUC1H7GTq/cV2G2UBO91PlQVzaKWPe8aJgvW0p029KAuL1tR6daCR37v4L/ACM4bZcINXn4UBcWYLHveNFw3rYXpt6UBPekMenWkt+4ZN5GKWMeEBYb9dulAm00sSjsu/4SRRsN4cKcDb0pbc8Rwx2G5pRc9zz2JKUs8DqGScacXkoz4aiahl4ldaiPbJf71cx3xwvdG2aXG9OroOvlTR37n6JKyYVxuefl4NzI4IGVLHG/nQbzEImOmB0pncXOsEFRgr5VXDesvdyMD0pk5Z5EpSkPLeZyo3NBxhzJ49ansJGZQebjfwAqGRsPjmPnPWpb36ItsJvrZyDseta4fbNg5x8zXNwgIOXcjruagto0Ocg/NjTqT9CRu6t9MhJYfWt3E4KlVBJ88VHOyhtlHh13plJcnScADYdAKinLHYQss7eTUqg41HHy8auXD+HCJNIOc7n41X+zGZJ8t+AEj51eEjBo106vC3sWBHNbHO1CXsB1Y3+VWKW2wc1FcWurBHWjHyFbhkp0sW561lPm4e2elZT/ACoj8JdQarn2gR6rQnyZT+dWE1X+3UmLN8+JUD60JuWYMjXxIqsMKhU3P0oG4tFLE5PXyouC8bSnTb0pdLetqPxoHDfuNA1itlwne/KgJrVcnvHr5UXDfN3T5ZoO4ln9/ky6SRhuVJpOogLhtODkkY88injv3fwKMW+wxS2UBe9+VI57cNKQDsD1pxJNcBVAt59WDgezy58icaem4+opRamRVLmN9JONZjcJnOCNeMZyCMZ6jFKKnueSyMJLuh1DbL3Rq8D4UvNqur3vHyphDcykKwglK4yGEMhUg9CGC4I9aW21zLJ3o4pJFzgmOJ5AD1wSoO+42pR37uSKhP0NPZV3Gv8AD5VVLtO8cb71ZzxA6iuk6yNHL0Nr1YyF0Y1Z9MVXrqynEnLa3mWRslY2ikV2HiVQjJHwpoqeeSUIz9DfhVt3M6vL865urIa/e/KpLETouGt5h0GTBKN84A93rnb51Hec8scQz7bn7mTYEHBbu7DY9fKnxPcRcJZ7B0lmuk7np5VDw60GSME7GuC8xj1GOYLozq5UunTjOrVpxjG+elCIk6ZZoZ1UA5ZopVUDHUsVwB606jPkShL0dmJS5JGPDc+VNRpwB3fdNIrS0llUmOGWQD3jHFJIF8e8UUgbYO9FRbRhjsNxn1HhTOD24yNKMvI67Hxg8x8dTpHwFWdGxSTshGVgyR1JNN810GjhipIiFh810VoRXxUnOrRgllGFayoufWVDDHyhxqpfxzhguYjETjxB9R0ozVW81TJZWDIng8/fs/dRf5MSKNgVO5pNewlGy8Ui5PiteuI1JO06ZjB64bNDraNqyjVT+uSiUBrldO0cnQ/h9K+heHWaz8OsoT/m7KX5QPbyH+Q+teVxoDGQAN1IH0q4cJ7a20XsSsZcQ2rQzYt5zplxbacYTvD7qQZGRWKm1NvIaehlSljnI77UcZ5N7wt84SaSaFj5iWNNH/mCKqV9sk0dvDa2CHSrST3TgeRdyoI8i8zn+ChuP8dS5t+GAa+ZbCJrkGKRdLKIS+klcPuje6T0qftOYuJX3tEILQiCOImSN4zrWSZiArgHGHXfpvV27PESE6mo/q4Lx2O5v9ncK5bqq6IeaGxmSL2WTCJkHvczlttjZDv4ELsxq0cY9mHIc3U3LMi8sJKbWH7xlYHul+/kg5Bz40DwjjlnHbWEMxuFks9DYS2uHUyLbyQFSyxkFcSscg9QKHue0EbRcVQpMrXZfkLyZG1A2UUCliqkJlozsxBA61Ztfor3x9lnEUTcaDaPvY7IguUIyHmXGliO9gBhkdNRHnVb7e8amh4Vb8QUqbmKYlHZQca+dE23TGhvyHlR83a6L22K4RJnhEEkMrcmVWRjJG6MEZQzr3GB0g9RSHtrcR3diLC1EjqpaRpZI2iGQHKoA4BLFnG4GAFPjT7H6GdkfZYu3XHJorrhVurDl3Mw5oKgluVLbsmD+HcmrDf2hU3kuoEPAqhR1XlpLkn46/yqg9q+LxXV1w6eISFLSQtMWgmUqC8ByqsoL7Rt7uabS9r7VpLthz8TQxxxn2W4GWVZgQe53R313OBvUcMlleyLtX7X/YMRtXjUCzBuOZ1aD2XviPY9/wAulXMmQSQnWOSIJeZHjU7vmDlsqhSSAvNBA8XXY7Y807RXVhecOgtJmullgiXSsdvMAZltzHpZ2iZSuSdwR8afHtnae1W82ZtEVvPE59muMh5HtSoA0ZI+5fcbbfCpbJeht0fZrsLxFJbFI7Bo0lgklZ7ViIyys8pVJO6zRq2tGDAHdceYFLuuFrc3VxPPEYpGl+8ttWoROEQEE4AbONeQMHXnfrVl4Dx21SOP2hZYJYZ5ZldIHbnRs8pRSyKSAUlAKtg5Wgru759xcXAVkWV1KKww2lIkj1MPAnSTjyxV9FW6eJLgzama2cMGEQUYAwB4VDI2KKdqAvXHnRiEV2Rg3EXtW+Ky5uFXxz8KUyOQTQxznc1eqSDsHA4sn/0VlV9utZT/ABEflPQg9SB6XrPXQuKwOIkhhqqG5QOCp6GoFnrbS1W4J8Mui3F5QvksnX9HpI9dqL7P8JNzeQ284zGyyyOqO6EhFAHeQhh3nXoa65lO+wEeviDvj9Fbaf8AXSqf9wawXaCqC3harqV0/wDG+wHxrsjapxDhsEaSezXXtPNHPuGLGKAyR4dn1Lvv3SPdqTjfZOO2gvpPvQYpI/ZTz5+7C6QZUrrw+HaYZbJ9elWOOFJP7JlhdpUSaQLIV0kobK6XUQQCO8qjpXHaviAn4ZdnxSV4WHkYrkKufiuk/OqEsdiyTcu5y/YyxE3IQXKOYzIJBd3LaQGC+7JIyk5IO4Iqv9k7QXsoiuGYqkWtlRmj5sgk5eSVIOkaScA/iGa9De2b2wTY7ggZC2R7xkVsY+AO9eY9i7QXFzFi4kgZUllieIx5lDTd5G1qwdCrK2nHgD4VOMnhlM4x3LgI9lspbqzgiaWMys63dkZ5tcR9lklXLatUZDIB3SAc0wtOzduGv2dJ5kt5liigE0x0p7NbysQQ2uRsyse8W6YFM72PVc8ImnjSO8MkiuqkZC+xXBkUYJ1KH0+Jxn1oOys5BfcTubaaQzpNEptdUfJlX2S3KF1ZdSneTDBl93x3Bjlk9q9CeyteGy34tla4uIZgBA0dxMEgljWd543dZVc5WNSAQ2DkZAo+x4Dw+a/mskiuRyEJkLXVzpZ25LIY2E5bZXbOQBv44rvjEKJ2gsuWAC+t5Qv+c9luwrtj8RUfRRU3Zkf4+4l+6n+ytafLFhCnstwqwvrq6jWK6WGBIQEkubhW5pkuVkcMsxJUiOPGT+HOBncuPsxbyPYmJp4oLqNpJIHmkaQ/dLIqiRmLoe9hsHw2x1px2SjvPbrxrwRhzDbiPl9OUs15oz+1vvSi/tFvV4LPNPJDPLGGE0TKjc1rZZiFBUouoqRjG4JXxxSUmuzFsi/AD2ht7OE6YNcF0suk2zSyNzYOa0fN0uSNJX7wMN8bHyoWdsVY+3SP7BruFAnjuUSB+7rdPaFTV3dgXg1MwGBsTgYwKfdXXhRDRtyRg1aSkRyynzoFm33rJJaGeSjEImBs5kFRTAAA5rl5agmfaritkRNZQzS1lLI21l5t7QvjS6ZIzgsc/QD0rua0I92RGBOM5xv4+f8Ax9KTmsoQ857mqOPQ3MJVdRdD6BiT8tq4WagoqlTpSLcIn5tctpJyc5/ZZl6dM6SM9TUVd1GfK5JRWOxoW8YGAGAHQK7gD4AHA6np51r2WM5GDg7kamwx82GcE7Dc+VdPXCVVGK9E5N+zs26NkHUwPVWkkZSPIqTgiipERwAyju4K42KkdCpG4PwqFalgpmljsRTee5tbOMnUQzN01s7s+N9uYTqA3Pj41ItjHnUAQ3TWrur4OMjmA6j0Hj4CpVrmqlFEm2vJ0LOIDAXx1E5OosRgsXznONs5qOSzj8iPUO4Y9OrA5PQdfKpFrsdaTSJJsC9iTr38+fMkzgZwCc7jc7epqM2EWNJTKgABSSQoHTSCcL0HSmbUPB1NJY9D8+xfcRqCGJZmGyl3aQqD4KXJ0j4UsmuN6ZcR8fjUVz1T41soeFwUWLL5FbTUJLNVnpbf/pU+dbY2sodaEMl0MVFJdbdKtidag7RfoD8v51L5WJ1oqG5rKv8AF7o+A/lWVX8jJbUf/9k=" class="qr-code" alt="Kartun Minal Aidin">
+            <p>Ubur-ubur ikan lele, bisa donk bagi THR lee</p>
+            </a>
             <button onclick="closeModal()">Tutup</button>
         </div>
     </div>
 
+    <div id="takbiranModal" class="modal">
+        <h3>Lafadz Takbir</h3>
+        <p>Allahu akbar, Allahu akbar, Allahu akbar. La ilaha illallahu wallahu akbar. Allahu akbar wa lillahil hamdu.<br><br>
+        Allahu akbar kabirr, walhamdu lillahi katsira, wa subhanallahi bukratan wa ashila, la ilaha illallahu wa la na'budu illa iyyahu mukhlishina lahud dina wa law karihal kafirun, la ilaha illallahu wahdah, shadaqa wa'dah, wa nashara 'abdah, wa a'azza jundahu wa hazamal ahzaba wahdah, la ilaha illallahu wallahu akbar. Allahu akbar walillahil hamdu.</p>
+        <button onclick="closeTakbiranModal()">Tutup</button>
+    </div>
+
+    <div id="sunnahModal" class="modal">
+        <h3>Sunnah Idul Fitri</h3>
+        <img src="c:\Users\Zidnil\Desktop\Idul Fitri\Sunnah idul fitri.jpg" alt="Gambar Sunnah Idul Fitri" class="qr-code">
+        <button onclick="closeSunnahModal()">Tutup</button>
+    </div>
+
     <div class="comment-section">
         <h2>Berikan tanggapan dan komentar selama berteman/berkenalan dengan saya.</h2>
-        <div class="comment-form">
-            <input type="text" id="nameInput" placeholder="Nama Anda">
-            <textarea id="commentInput" placeholder="Komentar Anda"></textarea>
-            <button id="submitComment">Kirim Komentar</button>
-        </div>
-        <div id="commentsDisplay">
-        </div>
         <div id="commento"></div>
         <script defer src="https://cdn.commento.io/js/commento.js"></script>
     </div>
@@ -428,6 +643,19 @@
             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14z" />
         </svg>
     </div>
+
+    <div class="footer">
+        <div class="social-icons">
+            <a href="https://instagram.com/zidnilalamin" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/128/2111/2111463.png" alt="Instagram" class="social-icon">
+            </a>
+            <a href="https://wa.me/+6282123682557" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png" alt="WhatsApp" class="social-icon">
+            </a>
+        </div>
+        <p class="copyright">@zidnilalamin</p>
+    </div>
+
     <script>
         let interactionCount = 0;
         let scale = 1;
@@ -552,58 +780,47 @@
             }
         });
 
-        // JavaScript untuk Komentar (localStorage - mungkin ingin Anda hapus atau biarkan)
-        const nameInput = document.getElementById('nameInput');
-        const commentInput = document.getElementById('commentInput');
-        const submitCommentButton = document.getElementById('submitComment');
-        const commentsDisplay = document.getElementById('commentsDisplay');
+        // JavaScript untuk Menu Takbiran
+        const takbiranMenu = document.getElementById('takbiranMenu');
+        const takbiranModal = document.getElementById('takbiranModal');
+        const sunnahModal = document.getElementById('sunnahModal'); // Dapatkan referensi ke modal Sunnah
 
-        submitCommentButton.addEventListener('click', function () {
-            const name = nameInput.value.trim();
-            const comment = commentInput.value.trim();
-
-            if (name && comment) {
-                const newCommentData = { name: name, comment: comment };
-                comments.push(newCommentData);
-                displayComments();
-                saveComments(); // Simpan komentar setelah ditambahkan
-                nameInput.value = '';
-                commentInput.value = '';
-            } else {
-                alert('Mohon isi nama dan komentar Anda.');
+        takbiranMenu.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (sunnahModal.style.display === 'block') {
+                sunnahModal.style.display = 'none';
             }
+            takbiranModal.style.display = 'block';
         });
 
-        const commentsKey = 'idulFitriComments'; // Kunci untuk menyimpan komentar di localStorage
-        let comments = []; // Array untuk menyimpan komentar sementara
-
-        // Fungsi untuk menyimpan komentar ke localStorage
-        function saveComments() {
-            localStorage.setItem(commentsKey, JSON.stringify(comments));
+        function closeTakbiranModal() {
+            takbiranModal.style.display = 'none';
         }
 
-        // Fungsi untuk memuat komentar dari localStorage
-        function loadComments() {
-            const storedComments = localStorage.getItem(commentsKey);
-            if (storedComments) {
-                comments = JSON.parse(storedComments);
-                displayComments(); // Panggil fungsi untuk menampilkan komentar yang dimuat
+        // JavaScript untuk Menu Sunnah Idul Fitri
+        const sunnahMenu = document.getElementById('sunnahMenu');
+
+        sunnahMenu.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (takbiranModal.style.display === 'block') {
+                takbiranModal.style.display = 'none';
             }
+            sunnahModal.style.display = 'block';
+        });
+
+        function closeSunnahModal() {
+            sunnahModal.style.display = 'none';
         }
 
-        // Fungsi untuk menampilkan komentar
-        function displayComments() {
-            commentsDisplay.innerHTML = ''; // Bersihkan tampilan komentar sebelumnya
-            comments.forEach(commentData => {
-                const newComment = document.createElement('div');
-                newComment.classList.add('comment');
-                newComment.innerHTML = `<strong>${commentData.name}:</strong> ${commentData.comment}`;
-                commentsDisplay.appendChild(newComment);
-            });
-        }
-
-        // Panggil fungsi loadComments saat halaman dimuat
-        window.addEventListener('load', loadComments);
+        // Tutup modal saat klik di luar (untuk modal Takbiran dan Sunnah)
+        window.addEventListener('click', (e) => {
+            if (e.target === takbiranModal) {
+                takbiranModal.style.display = 'none';
+            }
+            if (e.target === sunnahModal) {
+                sunnahModal.style.display = 'none';
+            }
+        });
 
         // JavaScript untuk Kontrol Audio
         const hariRayaMusic = document.getElementById('hariRayaMusic');
