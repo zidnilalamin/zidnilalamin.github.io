@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangkap Ketupat!</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0; /* Warna latar belakang lembut */
+        }
+
+        .game-overlay {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-overlay h1 {
+            color: #28a745; /* Warna hijau cerah untuk judul (nuansa Idul Fitri) */
+            margin-bottom: 20px;
+        }
+
+        #play-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        #play-button:hover {
+            background-color: #1e7e34;
+        }
+
+        .game-container {
+            position: relative; /* Untuk memposisikan elemen di dalamnya */
+            width: 400px;
+            height: 500px;
+            background-color: #e9ecef; /* Warna latar belakang area game */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Agar ketupat yang jatuh tidak terlihat di luar area */
+            display: none; /* Sembunyikan game container awalnya */
+            flex-direction: column;
+            justify-content: flex-end; /* Letakkan keranjang di bawah */
+            align-items: center;
+        }
+
+        #back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #007bff; /* Warna biru untuk tombol kembali */
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            z-index: 10; /* Pastikan tombol berada di atas elemen lain */
+        }
+
+        #back-button:hover {
+            background-color: #0056b3;
+        }
+
+        .basket {
+            font-size: 3em;
+            margin-bottom: 20px;
+            position: absolute; /* Agar bisa diposisikan dengan left */
+            bottom: 20px;
+        }
+
+        .score {
+            position: absolute;
+            top: 10px;
+            left: 50%; /* Tengah secara horizontal */
+            transform: translateX(-50%); /* Koreksi agar benar-benar di tengah */
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #343a40; /* Warna teks gelap untuk skor */
+            z-index: 10; /* Pastikan berada di atas elemen lain */
+        }
+
+        .lives {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #343a40; /* Warna teks gelap untuk nyawa */
+            z-index: 10; /* Pastikan berada di atas elemen lain */
+        }
+
+        .ketupat {
+            position: absolute;
+            font-size: 2em;
+            user-select: none; /* Mencegah teks emoji terseleksi saat diseret */
+        }
+
+        .gold {
+            color: gold;
+        }
+
+        .diamond {
+            color: skyblue;
+        }
+
+        .bomb {
+            color: red;
+            font-size: 2.5em; /* Bom sedikit lebih besar */
+        }
+    </style>
+</head>
+<body>
+    <div class="game-overlay">
+        <h1>Tangkap Ketupat!</h1>
+        <button id="play-button">Mulai Main</button>
+    </div>
+    <div class="game-container">
+        <button id="back-button">Kembali</button>
+        <div class="lives">❤️ 3</div>
+        <div class="basket">🧺</div>
+        <div class="score">Skor: 0</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const playButton = document.getElementById('play-button');
+            const gameOverlay = document.querySelector('.game-overlay');
+            const gameContainer = document.querySelector('.game-container');
+            const basket = document.querySelector('.basket');
+            const scoreDisplay = document.querySelector('.score');
+            const livesDisplay = document.querySelector('.lives');
+            const backButton = document.getElementById('back-button');
+
+            let score = 0;
+            let gameSpeed = 3; // Kecepatan awal yang lebih lambat (normal)
+            let ketupats = [];
+            let gameActive = false;
+            let lives = 3;
+            let itemCreationInterval = 750; // Interval pembuatan item dalam milidetik
+
+            playButton.addEventListener('click', () => {
+                gameOverlay.style.display = 'none';
+                gameContainer.style.display = 'flex';
+                score = 0;
+                scoreDisplay.textContent = `Skor: ${score}`;
+                gameSpeed = 3; // Reset kecepatan awal
+                ketupats = [];
+                gameActive = true;
+                lives = 3;
+                livesDisplay.textContent = `❤️ ${lives}`;
+
+                const existingKetupats = gameContainer.querySelectorAll('.ketupat');
+                existingKetupats.forEach(ketupat => ketupat.remove());
+
+                startGame();
+            });
+
+            function startGame() {
+                setInterval(createMultipleKetupat, itemCreationInterval); // Membuat beberapa item setiap interval
+                gameLoop();
+            }
+
+            function gameLoop() {
+                if (!gameActive) {
+                    return;
+                }
+
+                console.log("--- Game Loop ---");
+                console.log("Game Speed:", gameSpeed);
+                console.log("Ketupats Array Length:", ketupats.length);
+                console.log("Game Container Offset Height:", gameContainer.offsetHeight);
+                console.log("Lives:", lives);
+
+                const speedIncrement = Math.floor(score / 10) * 0.1;
+                const currentSpeed = 3 + speedIncrement; // Kecepatan awal 3
+                gameSpeed = currentSpeed;
+
+                ketupats.forEach((ketupat, index) => {
+                    if (ketupat && ketupat.style) {
+                        let currentTop = parseInt(ketupat.style.top) || 0;
+                        console.log(`Ketupat ${index} - Current Top:`, currentTop, ketupat);
+
+                        if (!isNaN(currentTop)) {
+                            const newTop = currentTop + gameSpeed;
+                            ketupat.style.top = `${newTop}px`;
+                            console.log(`Ketupat ${index} - New Top:`, newTop);
+
+                            if (checkCollision(ketupat, basket)) {
+                                const value = parseInt(ketupat.getAttribute('data-value'));
+                                if (value > 0) {
+                                    score += value;
+                                    scoreDisplay.textContent = `Skor: ${score}`;
+                                    console.log(`Ketupat ${index} - Tertangkap, Skor:`, score);
+                                } else if (value === -1) {
+                                    lives--;
+                                    livesDisplay.textContent = `❤️ ${lives}`;
+                                    console.log(`Ketupat ${index} - Bom tertangkap, Nyawa:`, lives);
+                                    if (lives <= 0) {
+                                        endGame();
+                                    }
+                                }
+                                ketupats.splice(index, 1);
+                                ketupat.remove();
+                            } else if (newTop > gameContainer.offsetHeight) {
+                                console.log(`Ketupat ${index} - Jatuh ke bawah, Top:`, newTop, gameContainer.offsetHeight);
+                                ketupats.splice(index, 1);
+                                ketupat.remove();
+                            }
+                        } else {
+                            console.error(`Ketupat ${index} - Nilai currentTop tidak valid (NaN):`, currentTop, ketupat);
+                        }
+                    } else {
+                        console.error(`Ketupat ${index} - Elemen ketupat atau properti style tidak valid:`, ketupat);
+                    }
+                });
+
+                requestAnimationFrame(gameLoop);
+            }
+
+            function createMultipleKetupat() {
+                if (!gameActive) return;
+
+                const numberOfItems = Math.floor(Math.random() * 3) + 1; // Membuat 1 hingga 3 item
+
+                for (let i = 0; i < numberOfItems; i++) {
+                    createSingleKetupat();
+                }
+            }
+
+            function createSingleKetupat() {
+                const ketupat = document.createElement('div');
+                ketupat.classList.add('ketupat');
+                const randomX = Math.random() * (gameContainer.offsetWidth - 40);
+                ketupat.style.left = `${randomX}px`;
+                ketupat.style.top = '0px';
+                console.log("Ketupat Created - Top:", ketupat.style.top, "Left:", ketupat.style.left);
+
+                const randomNumber = Math.random();
+                let type = 'regular';
+                let value = 1;
+                let emoji = '🍚';
+                let bombProbability = 0.20 + (score / 100);
+
+                if (score >= 100 && randomNumber < 0.05) {
+                    type = 'diamond';
+                    value = 100;
+                    emoji = '💎';
+                    ketupat.classList.add('diamond');
+                } else if (randomNumber < 0.15) {
+                    type = 'gold';
+                    value = 10;
+                    emoji = '🌟';
+                    ketupat.classList.add('gold');
+                } else if (randomNumber < bombProbability) {
+                    type = 'bomb';
+                    value = -1;
+                    emoji = '💣';
+                    ketupat.classList.add('bomb');
+                }
+
+                ketupat.textContent = emoji;
+                ketupat.setAttribute('data-value', value);
+                gameContainer.appendChild(ketupat);
+                ketupats.push(ketupat);
+            }
+
+            function checkCollision(element1, element2) {
+                const rect1 = element1.getBoundingClientRect();
+                const rect2 = element2.getBoundingClientRect();
+
+                return !(rect1.top > rect2.bottom ||
+                         rect1.bottom < rect2.top ||
+                         rect1.left > rect2.right ||
+                         rect1.right < rect2.left);
+            }
+
+            function endGame() {
+                gameActive = false;
+                gameOverlay.style.display = 'flex';
+                const gameOverMessage = gameOverlay.querySelector('h1');
+                gameOverMessage.textContent = `Game Over! Skor Anda: ${score}. ❤️ Tersisa: ${lives}`;
+                playButton.textContent = 'Main Lagi';
+            }
+
+            // Kontrol keranjang menggunakan mouse
+            gameContainer.addEventListener('mousemove', (e) => {
+                if (!gameActive) return;
+                const containerRect = gameContainer.getBoundingClientRect();
+                const mouseX = e.clientX - containerRect.left;
+                const basketWidth = basket.offsetWidth;
+                let newBasketX = mouseX - basketWidth / 2;
+
+                if (newBasketX < 0) {
+                    newBasketX = 0;
+                } else if (newBasketX > containerRect.width - basketWidth) {
+                    newBasketX = containerRect.width - basketWidth;
+                }
+
+                basket.style.left = `${newBasketX}px`;
+            });
+
+            // Kontrol keranjang menggunakan sentuhan (touch)
+            gameContainer.addEventListener('touchmove', (e) => {
+                if (!gameActive) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const containerRect = gameContainer.getBoundingClientRect();
+                const touchX = touch.clientX - containerRect.left;
+                const basketWidth = basket.offsetWidth;
+                let newBasketX = touchX - basketWidth / 2;
+
+                if (newBasketX < 0) {
+                    newBasketX = 0;
+                } else if (newBasketX > containerRect.width - basketWidth) {
+                    newBasketX = containerRect.width - basketWidth;
+                }
+
+                basket.style.left = `${newBasketX}px`;
+            }, { passive: false });
+
+            backButton.addEventListener('click', () => {
+                window.location.href = "file:///C:/Users/Zidnil/Desktop/Idul%20Fitri/index.html#"; // Pastikan Anda mengganti ini dengan URL yang benar
+            });
+        });
+    </script>
+</body>
+</html>
