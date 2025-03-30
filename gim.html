@@ -262,6 +262,14 @@
             let itemCreationInterval = 750; // Interval pembuatan item dalam milidetik
             const maxItems = 10; // Batas maksimal item yang jatuh
 
+            let goldKetupatSpawned = 0;
+            const goldKetupatLimit = 10;
+            const goldSpawnInterval = 50000; // 50 detik dalam milidetik
+            let lastGoldSpawnTime = 0;
+
+            const diamondSpawnInterval = 60000; // 60 detik dalam milidetik
+            let lastDiamondSpawnTime = 0;
+
             playButton.addEventListener('click', () => {
                 gameOverlay.style.display = 'none';
                 gameContainer.style.display = 'flex';
@@ -295,36 +303,26 @@
                     return;
                 }
 
-                console.log("--- Game Loop ---");
-                console.log("Game Speed:", gameSpeed);
-                console.log("Ketupats Array Length:", ketupats.length);
-                console.log("Game Container Offset Height:", gameContainer.offsetHeight);
-                console.log("Lives:", lives);
-
-                const speedIncrement = Math.floor(score / 10) * 0.1;
-                const currentSpeed = 3 + speedIncrement; // Kecepatan awal 3
-                gameSpeed = currentSpeed;
+                // Peningkatan kecepatan setiap skor kelipatan 10
+                const speedIncrement = Math.floor(score / 10) * 0.1; // Contoh: skor 10 -> +0.1, skor 20 -> +0.2, dst.
+                gameSpeed = 3 + speedIncrement; // Kecepatan dasar 3
 
                 ketupats.forEach((ketupat, index) => {
                     if (ketupat && ketupat.style) {
                         let currentTop = parseInt(ketupat.style.top) || 0;
-                        console.log(`Ketupat ${index} - Current Top:`, currentTop, ketupat);
 
                         if (!isNaN(currentTop)) {
                             const newTop = currentTop + gameSpeed;
                             ketupat.style.top = `${newTop}px`;
-                            console.log(`Ketupat ${index} - New Top:`, newTop);
 
                             if (checkCollision(ketupat, basket)) {
                                 const value = parseInt(ketupat.getAttribute('data-value'));
                                 if (value > 0) {
                                     score += value;
                                     scoreDisplay.textContent = `Skor: ${score}`;
-                                    console.log(`Ketupat ${index} - Tertangkap, Skor:`, score);
                                 } else if (value === -1) {
                                     lives--;
                                     livesDisplay.textContent = `❤️ ${lives}`;
-                                    console.log(`Ketupat ${index} - Bom tertangkap, Nyawa:`, lives);
                                     if (lives <= 0) {
                                         endGame();
                                     }
@@ -332,15 +330,10 @@
                                 ketupats.splice(index, 1);
                                 ketupat.remove();
                             } else if (newTop > gameContainer.offsetHeight) {
-                                console.log(`Ketupat ${index} - Jatuh ke bawah, Top:`, newTop, gameContainer.offsetHeight);
                                 ketupats.splice(index, 1);
                                 ketupat.remove();
                             }
-                        } else {
-                            console.error(`Ketupat ${index} - Nilai currentTop tidak valid (NaN):`, currentTop, ketupat);
                         }
-                    } else {
-                        console.error(`Ketupat ${index} - Elemen ketupat atau properti style tidak valid:`, ketupat);
                     }
                 });
 
@@ -352,39 +345,54 @@
 
                 const currentItemCount = ketupats.length;
                 const remainingCapacity = maxItems - currentItemCount;
-                const numberOfItemsToCreate = Math.max(0, Math.floor(Math.random() * Math.min(3, remainingCapacity + 1))); // Membuat 0 hingga maksimal 3 item, dan tidak melebihi batas maksimal
+                const numberOfRegularToCreate = Math.max(0, Math.floor(Math.random() * Math.min(3, remainingCapacity + 1))); // Membuat 0 hingga maksimal 3 ketupat biasa
 
-                for (let i = 0; i < numberOfItemsToCreate; i++) {
-                    createSingleKetupat();
+                for (let i = 0; i < numberOfRegularToCreate; i++) {
+                    createKetupat('regular');
+                }
+
+                // Logika untuk ketupat emas
+                const currentTime = Date.now();
+                if (currentTime - lastGoldSpawnTime >= goldSpawnInterval) {
+                    goldKetupatSpawned = 0;
+                    lastGoldSpawnTime = currentTime;
+                }
+                if (goldKetupatSpawned < goldKetupatLimit && Math.random() < 0.3) { // Peluang 30% untuk membuat ketupat emas jika belum mencapai batas
+                    createKetupat('gold');
+                    goldKetupatSpawned++;
+                }
+
+                // Logika untuk ketupat berlian
+                if (currentTime - lastDiamondSpawnTime >= diamondSpawnInterval && Math.random() < 0.5) { // Peluang 50% untuk membuat ketupat berlian setiap 60 detik
+                    createKetupat('diamond');
+                    lastDiamondSpawnTime = currentTime;
+                }
+
+                // Bom akan sering turun (peluang lebih tinggi)
+                if (Math.random() < 0.4) { // Peluang 40% untuk membuat bom
+                    createKetupat('bomb');
                 }
             }
 
-            function createSingleKetupat() {
+            function createKetupat(type) {
                 const ketupat = document.createElement('div');
                 ketupat.classList.add('ketupat');
                 const randomX = Math.random() * (gameContainer.offsetWidth - 40);
                 ketupat.style.left = `${randomX}px`;
                 ketupat.style.top = '0px';
-                console.log("Ketupat Created - Top:", ketupat.style.top, "Left:", ketupat.style.left);
 
-                const randomNumber = Math.random();
-                let type = 'regular';
                 let value = 1;
                 let emoji = '🍚';
-                let bombProbability = 0.20 + (score / 100);
 
-                if (score >= 100 && randomNumber < 0.05) {
-                    type = 'diamond';
-                    value = 100;
-                    emoji = '💎';
-                    ketupat.classList.add('diamond');
-                } else if (randomNumber < 0.15) {
-                    type = 'gold';
+                if (type === 'gold') {
                     value = 10;
                     emoji = '🌟';
                     ketupat.classList.add('gold');
-                } else if (randomNumber < bombProbability) {
-                    type = 'bomb';
+                } else if (type === 'diamond') {
+                    value = 100;
+                    emoji = '💎';
+                    ketupat.classList.add('diamond');
+                } else if (type === 'bomb') {
                     value = -1;
                     emoji = '💣';
                     ketupat.classList.add('bomb');
@@ -436,6 +444,9 @@
                     gameActive = true;
                     lives = 3;
                     livesDisplay.textContent = `❤️ ${lives}`;
+                    goldKetupatSpawned = 0; // Reset counter emas
+                    lastGoldSpawnTime = 0; // Reset timer emas
+                    lastDiamondSpawnTime = 0; // Reset timer berlian
                     startGame();
                 });
                 gameOverMenu.appendChild(playAgainButton);
