@@ -18,29 +18,41 @@
         .game-overlay {
             text-align: center;
             background-color: #fff;
-            padding: 30px;
+            padding: 20px; /* Padding lebih kecil secara default */
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column; /* Susun elemen secara vertikal */
+            align-items: center; /* Pusatkan elemen secara horizontal */
         }
 
         .game-overlay h1 {
             color: #28a745; /* Warna hijau cerah untuk judul (nuansa Idul Fitri) */
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Margin bawah lebih kecil */
+            font-size: 1.5em; /* Ukuran font lebih kecil secara default */
+            word-break: break-word; /* Mencegah teks panjang merusak tata letak */
         }
 
-        #play-button {
-            background-color: #28a745;
+        .game-overlay button {
+            background-color: #007bff; /* Warna biru untuk tombol kembali */
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1em; /* Gunakan em untuk skala yang lebih baik */
             transition: background-color 0.3s ease;
+            margin-top: 10px; /* Margin atas lebih kecil */
+            width: 80%; /* Lebar tombol menyesuaikan */
+            max-width: 250px; /* Lebar maksimal tombol lebih kecil */
         }
 
-        #play-button:hover {
-            background-color: #1e7e34;
+        .game-overlay button:hover {
+            background-color: #0056b3;
+        }
+
+        #play-button {
+            background-color: #28a745;
         }
 
         .game-container {
@@ -67,7 +79,7 @@
             padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 0.8em; /* Ukuran font lebih kecil */
             transition: background-color 0.3s ease;
             z-index: 10; /* Pastikan tombol berada di atas elemen lain */
         }
@@ -122,6 +134,110 @@
             color: red;
             font-size: 2.5em; /* Bom sedikit lebih besar */
         }
+
+        /* Media query untuk layar sangat kecil (misalnya, lebar kurang dari 320px) */
+        @media (max-width: 320px) {
+            .game-overlay {
+                padding: 15px;
+            }
+            .game-overlay h1 {
+                font-size: 1.2em;
+            }
+            .game-overlay button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+        }
+
+        /* Media query untuk layar kecil (misalnya, lebar hingga 480px) */
+        @media (min-width: 321px) and (max-width: 480px) {
+            .game-overlay {
+                padding: 18px;
+            }
+            .game-overlay h1 {
+                font-size: 1.4em;
+            }
+            .game-overlay button {
+                font-size: 1em;
+                padding: 9px 18px;
+            }
+        }
+
+        /* Media query untuk layar menengah (misalnya, lebar hingga 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .game-overlay {
+                padding: 25px;
+            }
+            .game-overlay h1 {
+                font-size: 1.6em;
+            }
+            .game-overlay button {
+                font-size: 1.1em;
+                padding: 11px 22px;
+            }
+        }
+
+        /* Media query untuk layar yang lebih besar (misalnya, lebar lebih dari 768px) */
+        @media (min-width: 769px) {
+            .game-overlay {
+                padding: 30px;
+            }
+            .game-overlay h1 {
+                font-size: 1.8em;
+            }
+            .game-overlay button {
+                font-size: 1.2em;
+                padding: 12px 25px;
+            }
+        }
+
+        .game-over-menu {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff; /* Latar belakang menu */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: absolute; /* Tambahkan positioning absolute */
+            top: 50%; /* Posisikan tengah secara vertikal */
+            left: 50%; /* Posisikan tengah secara horizontal */
+            transform: translate(-50%, -50%); /* Koreksi agar benar-benar di tengah */
+        }
+
+        .game-over-menu h2 {
+            color: #dc3545; /* Warna merah untuk judul game over */
+            margin-bottom: 15px;
+        }
+
+        .final-score {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .game-over-menu button {
+            background-color: #28a745; /* Warna hijau cerah untuk tombol */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            margin: 5px; /* Tambahkan margin antar tombol */
+        }
+
+        .game-over-menu button:hover {
+            background-color: #1e7e34;
+        }
+
+        .game-over-menu #back-to-main {
+            background-color: #007bff; /* Warna biru untuk tombol kembali */
+        }
+
+        .game-over-menu #back-to-main:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -134,7 +250,7 @@
         <div class="lives">❤️ 3</div>
         <div class="basket">🧺</div>
         <div class="score">Skor: 0</div>
-    </div>
+        </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -152,6 +268,7 @@
             let gameActive = false;
             let lives = 3;
             let itemCreationInterval = 750; // Interval pembuatan item dalam milidetik
+            const maxItems = 10; // Batas maksimal item yang jatuh
 
             playButton.addEventListener('click', () => {
                 gameOverlay.style.display = 'none';
@@ -166,6 +283,12 @@
 
                 const existingKetupats = gameContainer.querySelectorAll('.ketupat');
                 existingKetupats.forEach(ketupat => ketupat.remove());
+
+                // Hapus menu game over jika ada
+                const gameOverMenu = gameContainer.querySelector('.game-over-menu');
+                if (gameOverMenu) {
+                    gameContainer.removeChild(gameOverMenu);
+                }
 
                 startGame();
             });
@@ -235,9 +358,11 @@
             function createMultipleKetupat() {
                 if (!gameActive) return;
 
-                const numberOfItems = Math.floor(Math.random() * 3) + 1; // Membuat 1 hingga 3 item
+                const currentItemCount = ketupats.length;
+                const remainingCapacity = maxItems - currentItemCount;
+                const numberOfItemsToCreate = Math.max(0, Math.floor(Math.random() * Math.min(3, remainingCapacity + 1))); // Membuat 0 hingga maksimal 3 item, dan tidak melebihi batas maksimal
 
-                for (let i = 0; i < numberOfItems; i++) {
+                for (let i = 0; i < numberOfItemsToCreate; i++) {
                     createSingleKetupat();
                 }
             }
@@ -291,10 +416,48 @@
 
             function endGame() {
                 gameActive = false;
-                gameOverlay.style.display = 'flex';
-                const gameOverMessage = gameOverlay.querySelector('h1');
-                gameOverMessage.textContent = `Game Over! Skor Anda: ${score}. ❤️ Tersisa: ${lives}`;
-                playButton.textContent = 'Main Lagi';
+
+                // Hapus elemen game yang mungkin masih ada
+                ketupats.forEach(ketupat => ketupat.remove());
+                ketupats = [];
+
+                // Buat menu game over
+                const gameOverMenu = document.createElement('div');
+                gameOverMenu.classList.add('game-over-menu');
+
+                const gameOverTitle = document.createElement('h2');
+                gameOverTitle.textContent = 'Game Over!';
+                gameOverMenu.appendChild(gameOverTitle);
+
+                const finalScoreDisplay = document.createElement('div');
+                finalScoreDisplay.classList.add('final-score');
+                finalScoreDisplay.textContent = `Skor Akhir: ${score}`;
+                gameOverMenu.appendChild(finalScoreDisplay);
+
+                const playAgainButton = document.createElement('button');
+                playAgainButton.textContent = 'Main Lagi';
+                playAgainButton.addEventListener('click', () => {
+                    gameContainer.removeChild(gameOverMenu);
+                    score = 0;
+                    scoreDisplay.textContent = `Skor: ${score}`;
+                    gameSpeed = 3;
+                    gameActive = true;
+                    lives = 3;
+                    livesDisplay.textContent = `❤️ ${lives}`;
+                    startGame();
+                });
+                gameOverMenu.appendChild(playAgainButton);
+
+                const backToMainButton = document.createElement('button');
+                backToMainButton.id = 'back-to-main';
+                backToMainButton.textContent = 'Kembali';
+                backToMainButton.addEventListener('click', () => {
+                    window.location.href = "file:///C:/Users/Zidnil/Desktop/Idul%20Fitri/index.html#"; // Pastikan Anda mengganti ini dengan URL yang benar
+                });
+                gameOverMenu.appendChild(backToMainButton);
+
+                // Tambahkan menu game over ke dalam game container
+                gameContainer.appendChild(gameOverMenu);
             }
 
             // Kontrol keranjang menggunakan mouse
