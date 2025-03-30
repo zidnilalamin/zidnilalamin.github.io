@@ -345,31 +345,69 @@
 
                 const currentItemCount = ketupats.length;
                 const remainingCapacity = maxItems - currentItemCount;
-                const numberOfRegularToCreate = Math.max(0, Math.floor(Math.random() * Math.min(3, remainingCapacity + 1))); // Membuat 0 hingga maksimal 3 ketupat biasa
+                const numberOfRegularToCreate = Math.max(0, Math.floor(Math.random() * Math.min(3, remainingCapacity + 1)));
 
                 for (let i = 0; i < numberOfRegularToCreate; i++) {
                     createKetupat('regular');
                 }
 
-                // Logika untuk ketupat emas
                 const currentTime = Date.now();
                 if (currentTime - lastGoldSpawnTime >= goldSpawnInterval) {
                     goldKetupatSpawned = 0;
                     lastGoldSpawnTime = currentTime;
                 }
-                if (goldKetupatSpawned < goldKetupatLimit && Math.random() < 0.3) { // Peluang 30% untuk membuat ketupat emas jika belum mencapai batas
+                if (goldKetupatSpawned < goldKetupatLimit && Math.random() < 0.3) {
                     createKetupat('gold');
                     goldKetupatSpawned++;
                 }
 
-                // Logika untuk ketupat berlian
-                if (currentTime - lastDiamondSpawnTime >= diamondSpawnInterval && Math.random() < 0.5) { // Peluang 50% untuk membuat ketupat berlian setiap 60 detik
+                if (currentTime - lastDiamondSpawnTime >= diamondSpawnInterval && Math.random() < 0.5) {
                     createKetupat('diamond');
                     lastDiamondSpawnTime = currentTime;
                 }
 
-                // Bom akan sering turun (peluang lebih tinggi)
-                if (Math.random() < 0.4) { // Peluang 40% untuk membuat bom
+                // Logika untuk bom
+                let bombProbability = 0.4; // Peluang awal bom
+
+                if (score >= 150) {
+                    bombProbability += 0.5; // Tingkatkan peluang sebesar 0.5
+                }
+
+                if (score >= 950) {
+                    // Bom jatuh beruntun dengan celah
+                    const basketRect = basket.getBoundingClientRect();
+                    const basketCenterX = basketRect.left + basketRect.width / 2;
+                    const bombWidth = 40; // Perkiraan lebar bom
+
+                    // Buat 3 bom
+                    for (let i = 0; i < 3; i++) {
+                        const bomb = document.createElement('div');
+                        bomb.classList.add('ketupat', 'bomb');
+                        bomb.textContent = '💣';
+                        bomb.setAttribute('data-value', -1);
+                        gameContainer.appendChild(bomb);
+                        ketupats.push(bomb);
+
+                        // Atur posisi horizontal bom
+                        let bombX;
+                        if (i === 0) {
+                            bombX = basketCenterX - bombWidth * 2; // Bom kiri
+                        } else if (i === 1) {
+                            bombX = basketCenterX; // Posisi celah (tidak ada bom di tengah)
+                            bomb.style.display = 'none'; // Sembunyikan bom tengah
+                            continue;
+                        } else {
+                            bombX = basketCenterX + bombWidth * 2; // Bom kanan
+                        }
+
+                        // Pastikan bom tidak keluar dari batas layar
+                        if (bombX < 0) bombX = 0;
+                        if (bombX > gameContainer.offsetWidth - bombWidth) bombX = gameContainer.offsetWidth - bombWidth;
+
+                        bomb.style.left = `${bombX}px`;
+                        bomb.style.top = '-50px'; // Mulai dari atas layar
+                    }
+                } else if (Math.random() < bombProbability) {
                     createKetupat('bomb');
                 }
             }
