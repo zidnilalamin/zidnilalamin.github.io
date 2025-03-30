@@ -230,14 +230,6 @@
         .game-over-menu button:hover {
             background-color: #1e7e34;
         }
-
-        .game-over-menu #back-to-main {
-            background-color: #007bff; /* Warna biru untuk tombol kembali */
-        }
-
-        .game-over-menu #back-to-main:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
@@ -447,14 +439,6 @@
                     startGame();
                 });
                 gameOverMenu.appendChild(playAgainButton);
-
-                const backToMainButton = document.createElement('button');
-                backToMainButton.id = 'back-to-main';
-                backToMainButton.textContent = 'Kembali';
-                backToMainButton.addEventListener('click', () => {
-                    window.location.href = "file:///C:/Users/Zidnil/Desktop/Idul%20Fitri/index.html#"; // Pastikan Anda mengganti ini dengan URL yang benar
-                });
-                gameOverMenu.appendChild(backToMainButton);
 
                 // Tambahkan menu game over ke dalam game container
                 gameContainer.appendChild(gameOverMenu);
