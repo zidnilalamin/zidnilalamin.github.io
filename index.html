@@ -167,8 +167,8 @@
 
     #sunnahModal .qr-code {
         display: block;
-        max-width: 1080px; /* Lebar maksimum seperti postingan Instagram */
-        max-height: 1080px; /* Tinggi maksimum seperti postingan Instagram (untuk persegi) */
+        max-width: 720px; /* Lebar maksimum seperti postingan Instagram */
+        max-height: 720px; /* Tinggi maksimum seperti postingan Instagram (untuk persegi) */
         width: auto;
         height: auto;
         margin: 10px auto;
@@ -247,7 +247,7 @@
             padding: 20px;
             margin-top: 30px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.856);
             margin-bottom: 20px;
             max-width: 600px;
             margin-left: auto;
@@ -284,54 +284,6 @@
                 padding: 10px 20px;
                 font-size: 1em;
                 width: 80%;
-            }
-
-            .bulan {
-                width: 50px;
-                height: 50px;
-            }
-
-            .ketupat {
-                width: 40px;
-                height: 40px;
-            }
-
-            .decorations {
-                /* Contoh penyesuaian untuk tablet */
-                justify-content: space-evenly;
-                align-items: flex-start;
-            }
-
-            .decoration-item {
-                opacity: 0.6;
-            }
-
-            .decoration-item:nth-child(1) { /* Bulan 1 */
-                top: 5%;
-                left: 5%;
-            }
-
-            .decoration-item:nth-child(2) { /* Ketupat 1 */
-                top: 10%;
-                right: 10%;
-            }
-
-            .decoration-item:nth-child(3) { /* Bintang */
-                top: auto;
-                bottom: 5%;
-                left: 15%;
-                width: 40px;
-                height: 40px;
-            }
-
-            .decoration-item:nth-child(4) { /* Ketupat 2 */
-                bottom: 10%;
-                left: 25%;
-            }
-
-            .decoration-item:nth-child(5) { /* Bulan 2 */
-                bottom: 15%;
-                right: 15%;
             }
 
             .top-menu {
@@ -372,54 +324,6 @@
                 padding: 8px 15px;
             }
 
-            .bulan {
-                width: 30px;
-                height: 30px;
-            }
-
-            .ketupat {
-                width: 25px;
-                height: 25px;
-            }
-
-            .decorations {
-                /* Contoh penyesuaian untuk ponsel */
-                justify-content: space-around;
-                align-items: flex-start;
-            }
-
-            .decoration-item {
-                opacity: 0.5;
-            }
-
-            .decoration-item:nth-child(1) { /* Bulan 1 */
-                top: 2%;
-                left: 2%;
-            }
-
-            .decoration-item:nth-child(2) { /* Ketupat 1 */
-                top: 5%;
-                right: 5%;
-            }
-
-            .decoration-item:nth-child(3) { /* Bintang */
-                top: auto;
-                bottom: 2%;
-                left: 10%;
-                width: 30px;
-                height: 30px;
-            }
-
-            .decoration-item:nth-child(4) { /* Ketupat 2 */
-                bottom: 5%;
-                left: 20%;
-            }
-
-            .decoration-item:nth-child(5) { /* Bulan 2 */
-                bottom: 8%;
-                right: 2%;
-            }
-
             .top-menu {
                 top: 10px;
                 right: 10px;
@@ -446,44 +350,6 @@
             button {
                 font-size: 0.8em;
                 padding: 6px 12px;
-            }
-
-            .bulan {
-                width: 25px;
-                height: 25px;
-            }
-
-            .ketupat {
-                width: 20px;
-                height: 20px;
-            }
-
-            .decorations {
-                align-items: flex-start;
-            }
-
-            .decoration-item:nth-child(1) { /* Bulan 1 */
-                top: 1%;
-                left: 1%;
-            }
-
-            .decoration-item:nth-child(2) { /* Ketupat 1 */
-                top: 3%;
-                right: 3%;
-            }
-
-            .decoration-item:nth-child(3) { /* Bintang */
-                display: none; /* Sembunyikan bintang pada layar sangat kecil */
-            }
-
-            .decoration-item:nth-child(4) { /* Ketupat 2 */
-                bottom: 3%;
-                left: 15%;
-            }
-
-            .decoration-item:nth-child(5) { /* Bulan 2 */
-                bottom: 5%;
-                right: 1%;
             }
         }
 
@@ -580,18 +446,7 @@
         <a href="gim.html" id="GimMenu">Gim</a>
     </div>
     <audio id="hariRayaMusic" src="IdulFitri.mp3" loop style="display: none;" preload="auto"></audio>
-    <div class="decorations">
-        <img src="https://www.freeiconspng.com/uploads/crescent-moon-png-20.png" alt="Bulan Sabit"
-            class="decoration-item bulan" style="top: 10%; left: 10%;">
-        <img src="https://cdn-icons-png.flaticon.com/128/5429/5429718.png"
-            alt="Ketupat" class="decoration-item ketupat" style="top: 30%; right: 15%;">
-        <img src="https://pics.freeicons.io/uploads/icons/png/6072456641685121030-64.png" alt="Bintang"
-            class="decoration-item" style="top: 60%; left: 20%; width: 50px; height: 50px;">
-        <img src="https://cdn-icons-png.flaticon.com/128/5429/5429718.png"
-            alt="Ketupat" class="decoration-item ketupat" style="bottom: 20%; left: 35%;">
-        <img src="https://www.freeiconspng.com/uploads/crescent-moon-png-20.png" alt="Bulan Sabit"
-            class="decoration-item bulan" style="bottom: 10%; right: 10%; transform: scaleX(-1);">
-    </div>
+    
     <div class="container">
         <h1>Selamat Hari Raya Idul Fitri 1446 H</h1>
 
